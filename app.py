@@ -19,7 +19,7 @@ def index():
     blog_posts = load_posts()  # Fetch blog posts from JSON
     return render_template('index.html', posts=blog_posts)
 
-
+#add post
 @app.route('/add', methods=['GET', 'POST'])
 def add():
     if request.method == 'POST':
@@ -44,6 +44,21 @@ def add():
 
     # Render the form template for GET requests
     return render_template('add.html')
+
+#delete post
+@app.route('/delete/<int:post_id>', methods=['POST'])
+def delete(post_id):
+    # Load existing posts
+    posts = load_posts()
+
+    # Filter out the post with the given ID
+    posts = [post for post in posts if post['id'] != post_id]
+
+    # Save the updated list of posts back to JSON
+    save_posts(posts)
+
+    # Redirect back to the home page
+    return redirect(url_for('index'))
 
 
 if __name__ == '__main__':
